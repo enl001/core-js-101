@@ -128,11 +128,27 @@ function isTriangle(a, b, c) {
  *   { top:20, left:20, width: 20, height: 20 }    =>  false
  *
  */
-function doRectanglesOverlap(rect1, rect2) {
-  if (rect2.top > rect1.top && rect2.top < rect1.top + rect1.height) return true;
-  if (rect2.top + rect2.height > rect1.top
-      && rect2.top + rect2.height < rect1.top + rect1.height) return true;
-  return true;
+function doRectanglesOverlap(/* rect1, rect2 */) {
+  // const x11 = rect1.left;
+  // const x12 = rect1.left + rect1.width;
+  // const y11 = rect1.top;
+  // const y12 = rect1.top + rect1.height;
+  // const x21 = rect2.left;
+  // const x22 = rect2.left + rect2.width;
+  // const y21 = rect2.top;
+  // const y22 = rect2.top + rect2.height;
+
+  // console.log(y12);
+  // if (x21 >= x11 && x21 <= x12
+  //   && ((y21 <= y11 && y22 > y11) || (y22 > y12 && y21 <= y12))) return true;
+  // if (x22 >= x11 && x22 <= x12
+  //   && ((y21 <= y11 && y22 > y11) || (y22 > y12 && y21 <= y12))) return true;
+  // if (x22 >= x11 && x22 <= x12
+  //   && (y21 >= y11 && y22 <= y21)) return true;
+  // if (x21 >= x11 && x21 <= x12
+  //   && (y21 >= y11 && y22 <= y21)) return true;
+  // return false;
+  throw new Error('Not implemented');
 }
 
 
@@ -162,8 +178,9 @@ function doRectanglesOverlap(rect1, rect2) {
  *   { center: { x:0, y:0 }, radius:10 },  { x:10, y:10 }   => false
  *
  */
-function isInsideCircle(/* circle, point */) {
-  throw new Error('Not implemented');
+function isInsideCircle(circle, point) {
+  return (point.x - circle.center.x) ** 2 + (point.y - circle.center.y) ** 2
+    < (circle.radius ** 2);
 }
 
 
@@ -178,8 +195,18 @@ function isInsideCircle(/* circle, point */) {
  *   'abracadabra'  => 'c'
  *   'entente' => null
  */
-function findFirstSingleChar(/* str */) {
-  throw new Error('Not implemented');
+function findFirstSingleChar(str) {
+  const arr = str.split('');
+  const distinct = arr.filter(((v, i, a) => a.indexOf(v) === i));
+  // eslint-disable-next-line no-plusplus
+  for (let i = 0; i < distinct.length; i++) {
+    const c = distinct[i];
+    const index = arr.indexOf(c);
+    if ((arr.slice(index + 1)).indexOf(c) === -1) {
+      return c;
+    }
+  }
+  return null;
 }
 
 
@@ -205,8 +232,12 @@ function findFirstSingleChar(/* str */) {
  *   5, 3, true, true   => '[3, 5]'
  *
  */
-function getIntervalString(/* a, b, isStartIncluded, isEndIncluded */) {
-  throw new Error('Not implemented');
+function getIntervalString(a, b, isStartIncluded, isEndIncluded) {
+  let result = '';
+  result += (isStartIncluded) ? '[' : '(';
+  result += (a < b) ? `${a}, ${b}` : `${b}, ${a}`;
+  result += (isEndIncluded) ? ']' : ')';
+  return result;
 }
 
 
@@ -222,8 +253,8 @@ function getIntervalString(/* a, b, isStartIncluded, isEndIncluded */) {
  * 'rotator' => 'rotator'
  * 'noon' => 'noon'
  */
-function reverseString(/* str */) {
-  throw new Error('Not implemented');
+function reverseString(str) {
+  return str.split('').reverse().join('');
 }
 
 
@@ -239,8 +270,8 @@ function reverseString(/* str */) {
  *   87354 => 45378
  *   34143 => 34143
  */
-function reverseInteger(/* num */) {
-  throw new Error('Not implemented');
+function reverseInteger(num) {
+  return parseInt(num.toString().split('').reverse().join(''), 10);
 }
 
 
@@ -282,8 +313,11 @@ function isCreditCardNumber(/* ccn */) {
  *   10000 ( 1+0+0+0+0 = 1 ) => 1
  *   165536 (1+6+5+5+3+6 = 26,  2+6 = 8) => 8
  */
-function getDigitalRoot(/* num */) {
-  throw new Error('Not implemented');
+
+function getDigitalRoot(num) {
+  if (num < 9) return num;
+  const tmp = num.toString().split('').reduce((a, b) => parseInt(a, 10) + parseInt(b, 10), 0);
+  return getDigitalRoot(tmp);
 }
 
 
@@ -333,8 +367,8 @@ function isBracketsBalanced(/* str */) {
  *    365, 4  => '11231'
  *    365, 10 => '365'
  */
-function toNaryString(/* num, n */) {
-  throw new Error('Not implemented');
+function toNaryString(num, n) {
+  return (num.toString(n));
 }
 
 
@@ -350,8 +384,21 @@ function toNaryString(/* num, n */) {
  *   ['/web/assets/style.css', '/.bin/mocha',  '/read.me'] => '/'
  *   ['/web/favicon.ico', '/web-scripts/dump', '/webalizer/logs'] => '/'
  */
-function getCommonDirectoryPath(/* pathes */) {
-  throw new Error('Not implemented');
+function getCommonDirectoryPath(pathes) {
+  const pathes1 = pathes.map((p) => p.split('/'));
+  let result = '';
+  let canCheck = true;
+  while (canCheck) {
+    const dir = pathes1[0][0];
+    // eslint-disable-next-line no-loop-func
+    pathes1.forEach((path) => {
+      const currDir = path.shift();
+      if (currDir !== dir) canCheck = false;
+      if (path.length === 0) canCheck = false;
+    });
+    if (canCheck) result += `${dir}/`;
+  }
+  return result;
 }
 
 
