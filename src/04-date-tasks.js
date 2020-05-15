@@ -19,8 +19,8 @@
  *    'Tue, 26 Jan 2016 13:48:02 GMT' => Date()
  *    'Sun, 17 May 1998 03:00:00 GMT+01' => Date()
  */
-function parseDataFromRfc2822(/* value */) {
-  throw new Error('Not implemented');
+function parseDataFromRfc2822(value) {
+  return new Date(value);
 }
 
 /**
@@ -34,8 +34,8 @@ function parseDataFromRfc2822(/* value */) {
  *    '2016-01-19T16:07:37+00:00'    => Date()
  *    '2016-01-19T08:07:37Z' => Date()
  */
-function parseDataFromIso8601(/* value */) {
-  throw new Error('Not implemented');
+function parseDataFromIso8601(value) {
+  return new Date(value);
 }
 
 
@@ -77,8 +77,27 @@ function isLeapYear(date) {
  *    Date(2000,1,1,10,0,0),  Date(2000,1,1,10,0,0,250)     => "00:00:00.250"
  *    Date(2000,1,1,10,0,0),  Date(2000,1,1,15,20,10,453)   => "05:20:10.453"
  */
-function timeSpanToString(/* startDate, endDate */) {
-  throw new Error('Not implemented');
+function timeSpanToString(startDate, endDate) {
+  let span = (endDate - startDate);
+  const sss = span % 1000;
+  let sssStr = '';
+  if (sss < 100) {
+    if (sss < 10) sssStr = `${sss.toString()}00`;
+    else sssStr = `${sss.toString()}0`;
+  } else {
+    sssStr = sss.toString();
+  }
+
+  span = (span - sss) / 1000;
+  const ss = span % 60;
+  const ssStr = (ss < 10) ? `0${ss.toString()}` : ss.toString();
+  span = (span - ss) / 60;
+  const mm = span % 60;
+  const mmStr = (mm < 10) ? `0${mm.toString()}` : mm.toString();
+  span = (span - mm) / 60;
+  const hhStr = (span < 10) ? `0${span.toString()}` : span.toString();
+
+  return `${hhStr}:${mmStr}:${ssStr}.${sssStr}`;
 }
 
 
