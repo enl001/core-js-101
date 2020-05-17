@@ -1,3 +1,4 @@
+/* eslint-disable no-plusplus */
 /* *************************************************************************************************
  *                                                                                                *
  * Plese read the following tutorial before implementing tasks:                                   *
@@ -128,27 +129,28 @@ function isTriangle(a, b, c) {
  *   { top:20, left:20, width: 20, height: 20 }    =>  false
  *
  */
-function doRectanglesOverlap(/* rect1, rect2 */) {
-  // const x11 = rect1.left;
-  // const x12 = rect1.left + rect1.width;
-  // const y11 = rect1.top;
-  // const y12 = rect1.top + rect1.height;
-  // const x21 = rect2.left;
-  // const x22 = rect2.left + rect2.width;
-  // const y21 = rect2.top;
-  // const y22 = rect2.top + rect2.height;
+function doRectanglesOverlap(rect1, rect2) {
+  const x11 = rect1.left;
+  const x12 = rect1.left + rect1.width;
+  const y11 = rect1.top;
+  const y12 = rect1.top + rect1.height;
+  const x21 = rect2.left;
+  const x22 = rect2.left + rect2.width;
+  const y21 = rect2.top;
+  const y22 = rect2.top + rect2.height;
 
   // console.log(y12);
-  // if (x21 >= x11 && x21 <= x12
-  //   && ((y21 <= y11 && y22 > y11) || (y22 > y12 && y21 <= y12))) return true;
-  // if (x22 >= x11 && x22 <= x12
-  //   && ((y21 <= y11 && y22 > y11) || (y22 > y12 && y21 <= y12))) return true;
-  // if (x22 >= x11 && x22 <= x12
-  //   && (y21 >= y11 && y22 <= y21)) return true;
-  // if (x21 >= x11 && x21 <= x12
-  //   && (y21 >= y11 && y22 <= y21)) return true;
-  // return false;
-  throw new Error('Not implemented');
+  if ((x21 >= x11 && x21 <= x12) || (x22 >= x11 && x22 <= x12)) {
+    if (y21 <= y11 && y22 > y11) return true;
+    if (y21 >= y11 && y22 <= y12) return true;
+    if (y21 >= y11 && y21 <= y12 && y22 >= y12) return true;
+  }
+  if ((x21 <= x11 && x22 >= x12)) {
+    if (y21 <= y11 && y22 > y11) return true;
+    if (y21 >= y11 && y22 <= y12) return true;
+    if (y21 >= y11 && y21 <= y12 && y22 >= y12) return true;
+  }
+  return false;
 }
 
 
@@ -295,8 +297,18 @@ function reverseInteger(num) {
  *   5436468789016589 => false
  *   4916123456789012 => false
  */
-function isCreditCardNumber(/* ccn */) {
-  throw new Error('Not implemented');
+function isCreditCardNumber(ccn) {
+  const ccnN = (ccn.toString().split('')).map((x) => parseInt(x, 10));
+  const parity = ccnN.length % 2;
+  let sum = ccnN.pop();
+  // eslint-disable-next-line no-plusplus
+  for (let i = 0; i < ccnN.length; i++) {
+    let digit = ccnN[i];
+    if (i % 2 === parity) digit *= 2;
+    if (digit > 9) digit -= 9;
+    sum += digit;
+  }
+  return (sum % 10 === 0);
 }
 
 /**
@@ -420,8 +432,21 @@ function getCommonDirectoryPath(pathes) {
  *                         [ 6 ]]
  *
  */
-function getMatrixProduct(/* m1, m2 */) {
-  throw new Error('Not implemented');
+function getMatrixProduct(m1, m2) {
+  const result = new Array(m1.length);
+  for (let i = 0; i < result.length; i++) {
+    result[i] = new Array(m2[0].length);
+  }
+  for (let i = 0; i < m1.length; i++) {
+    for (let j = 0; j < m2[0].length; j++) {
+      let sum = 0;
+      for (let k = 0; k < m2.length; k++) {
+        sum += m1[i][k] * m2[k][j];
+      }
+      result[i][j] = sum;
+    }
+  }
+  return result;
 }
 
 
